@@ -57,15 +57,22 @@
                 <span class="text-danger" asp-validation-for="IsMostView"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AuthorId"></label>
-                <select class="form-control" asp-for="AuthorId">
-                    <option value="" selected>Choose...</option>
-                    @foreach (Author author in ViewBag.Authors)
-                    {
-                        <option value="@author.Id">@author.Name</option>
-                    }
+                <label asp-for="TagIds"></label>
+                <select class="form-control" asp-for="TagIds" asp-items="@new SelectList(ViewBag.Tags, nameof(Tag.Id), nameof(Tag.Name))">
+                   
                 </select>
                 <span class="text-danger" asp-validation-for="AuthorId"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GenreId"></label>
+                <select class="form-control" asp-for="GenreId">
+                    <option value="" selected>Choose...</option>
+                    @foreach (Genre genre in ViewBag.Genres)
+                    {
+                        <option value="@genre.Id">@genre.Name</option>
+                    }
+                </select>
+                <span class="text-danger" asp-validation-for="GenreId"></span>
             </div>
             <div class="form-group">
                 <label asp-for="GenreId"></label>

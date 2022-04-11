@@ -42,14 +42,19 @@ namespace Pustok.Models
         public Nullable<DateTime> UpdatedAt { get; set; }
         public Nullable<DateTime> DeletedAt { get; set; }
         [NotMapped]
+       
         public IFormFile MainImgFile { get; set; }
+        [NotMapped]
+        public List<int> TagIds { get; set; } = new List<int>();
         [NotMapped]
         public IFormFile HoverImgFile { get; set; }
         [NotMapped]
         public IEnumerable<IFormFile> ProductImagesFile { get; set; }
-
+        [NotMapped]
+        public List<int> FileIds { get; set; } = new List<int>();
         public virtual Author Author { get; set; }
         public virtual Genre Genre { get; set; }
         public virtual List<ProductImage> ProductImages { get; set; }
+        public  List<ProductTag> ProductTags { get; set; }
     }
 }

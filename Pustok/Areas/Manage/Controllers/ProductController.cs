@@ -61,6 +61,7 @@ namespace Pustok.Areas.Manage.Controllers
         {
             ViewBag.Authors = await _context.Authors.ToListAsync();
             ViewBag.Genres = await _context.Genres.ToListAsync();
+            ViewBag.Tags = await _context.Tags.ToListAsync();
 
             return View();
         }
@@ -164,7 +165,25 @@ namespace Pustok.Areas.Manage.Controllers
                 product.ProductImages = productImages;
             }
 
+            if(product.TagIds!=null && product.TagIds.Count > 0)
 
+            {
+                List<ProductTag> productTags = new List<ProductTag>();
+                foreach (int item in product.TagIds)
+                {
+                   if(!await _context.Tags.AnyAsync(t => t.Id == item))
+                    {
+                        ModelState.AddModelError("TagIds", "Data Yanlishdir");
+                        return View();
+                    }
+                    ProductTag productTag = new ProductTag
+                    {
+                        TagId = item
+                    };
+                    productTags.Add(productTag);
+                }
+                product.ProductTags = productTags;
+            }
 
             product.CreatedAt = DateTime.UtcNow.AddHours(4);
 
@@ -210,7 +229,7 @@ namespace Pustok.Areas.Manage.Controllers
             ViewBag.Authors = await _context.Authors.ToListAsync();
             ViewBag.Genres = await _context.Genres.ToListAsync();
 
-            if (5-dbProduct.ProductImages.Count() < product.ProductImagesFile.Count())
+            if (product.ProductImagesFile != null && 5-dbProduct.ProductImages.Count() < product.ProductImagesFile.Count())
             {
                 ModelState.AddModelError("ProductImagesFile", $"Maksimum Bu {5-dbProduct.ProductImages.Count()} qeder");
                 return View(dbProduct);
@@ -268,7 +287,7 @@ namespace Pustok.Areas.Manage.Controllers
 
             List<ProductImage> productImages = new List<ProductImage>();
 
-            if (product.ProductImagesFile != null)
+            if (product.ProductImagesFile != null) 
             {
                 bool error = false;
 
@@ -300,6 +319,13 @@ namespace Pustok.Areas.Manage.Controllers
                 }
 
                 dbProduct.ProductImages.AddRange(productImages);
+            }
+            foreach (ProductImage dbproductimage in dbProduct.ProductImages)
+            {
+                if(!product.FileIds.Any(f=> f == dbProduct.Id))
+                {
+                    Helper.DeleteFile(_env, dbproductimage.Name, "image", "products");
+                }
             }
 
             dbProduct.Title = product.Title;

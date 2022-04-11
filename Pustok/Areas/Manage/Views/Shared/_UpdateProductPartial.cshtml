@@ -45,11 +45,20 @@
             </div>
             @if (Model.ProductImages.Count < 5)
             {
-                <div class="form-group">
-                    <label asp-for="ProductImagesFile"></label>
-                    <input class="form-control" asp-for="ProductImagesFile" placeholder="Enter ProductImagesFile">
-                    <span class="text-danger" asp-validation-for="ProductImagesFile"></span>
+        <div class="form-group">
+            <label asp-for="ProductImagesFile"></label>
+            <input class="form-control" asp-for="ProductImagesFile" placeholder="Enter ProductImagesFile">
+            <span class="text-danger" asp-validation-for="ProductImagesFile"></span>
+            @foreach (ProductImage productImage in Model.ProductImages)
+            {
+                <div class="card" style="width: 10rem;">
+                    <a href="#" class="badge badge-danger remove-img">X</a>
+                    <img class="card-img-top" src="~/image/products/@productImage.Name" alt="Card image cap">
+                    <input type="hidden" name="FileIds[]" value="@productImage.Id" />
+                    
                 </div>
+            }
+        </div>
             }
             <div class="form-check">
                 <input class="form-check-input" asp-for="IsFeature" placeholder="Enter IsFeature">
@@ -68,9 +77,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="AuthorId"></label>
-                <select class="form-control" asp-for="AuthorId">
+                <select class="form-control" asp-for="AuthorId" asp-items="@new SelectList(ViewBag.Authors, nameof(Author.Id),nameof(Author.Name))">
                     <option value="">Choose...</option>
-                    @foreach (Author author in ViewBag.Authors)
+                    @*@foreach (Author author in ViewBag.Authors)
                     {
                         if (author.Id == Model.AuthorId)
                         {
@@ -80,7 +89,7 @@
                         {
                             <option value="@author.Id">@author.Name</option>
                         }
-                    }
+                    }*@
                 </select>
                 <span class="text-danger" asp-validation-for="AuthorId"></span>
             </div>

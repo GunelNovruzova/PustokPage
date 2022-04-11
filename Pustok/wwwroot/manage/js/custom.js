@@ -50,4 +50,8 @@ $(document).ready(function () {
             $(".updateproduct").html(data);
         })
     })
+    $(document).on("click", ".remove-img", function (e) {
+        e.preventDefault();
+        $(this).parent().remove();
+    })
 })
